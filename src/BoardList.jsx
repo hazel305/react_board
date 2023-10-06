@@ -2,8 +2,20 @@ import React, { Component } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css'; 
 import Table from 'react-bootstrap/Table';
 import Button from 'react-bootstrap/Button';
+import axios from "axios";
 
 
+
+const submitTest= ()=>{
+    axios.get('http://localhost:4000/')
+    .then(response=>{
+        alert('연결성공!');
+        console.log(response);
+    })
+    .catch(function(error){
+        console.log(error)
+    })
+}
 class BoardList extends Component{
     render(){
       return (
@@ -38,7 +50,7 @@ class BoardList extends Component{
         </tbody>
       </Table>
       <div className='d-flex gap-3'>
-        <Button variant="info">글쓰기</Button>
+        <Button variant="info" onClick={submitTest}>글쓰기</Button>
         <Button variant="secondary">수정</Button>
         <Button variant="danger">삭제</Button>
       </div>
