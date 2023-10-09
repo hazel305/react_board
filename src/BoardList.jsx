@@ -10,6 +10,7 @@ class Board extends Component{
     render(){
         return(    
         <tr>
+            <td><input type='checkbox' value={this.props.id} onChange={this.props.onCheckboxChange}/></td>
             <td>{this.props.id}</td>
             <td>{this.props.title}</td>
             <td>{this.props.REGISTER_ID}</td>
@@ -20,7 +21,8 @@ class Board extends Component{
 }
 class BoardList extends Component{
     state ={
-        boardList:[]
+        boardList:[],
+        checkList:[]
     }
    
     getList =()=>{
@@ -41,16 +43,24 @@ class BoardList extends Component{
       this.getList();
       console.log(this.state.boardList);
     }
-
+  
+    onCheckboxChange = (e)=>{
+      const list = this.state.checkList;
+      list.push(e.target.value);
+      this.setState({
+        checkList:list
+      })
+    }
 
     render(){
         // this.getList();
-        // console.log(this.state.boardList);
+        console.log(this.state.checkList);
       return (
         <>
          <Table striped bordered hover>
         <thead>
           <tr>
+            <th>선택</th>
             <th>#</th>
             <th>First Name</th>
             <th>Last Name</th>
@@ -60,14 +70,25 @@ class BoardList extends Component{
         <tbody>
          {this.state.boardList.map((item)=>{
             return(
-            <Board key={item.BOARD_ID} id={item.BOARD_ID} title={item.BOARD_TITLE} REGISTER_ID={item.REGISTER_ID} REGISTER_DATE={item.REGISTER_DATE}/>
+            <Board 
+            key={item.BOARD_ID} 
+            id={item.BOARD_ID} 
+            title={item.BOARD_TITLE} 
+            REGISTER_ID={item.REGISTER_ID}
+            REGISTER_DATE={item.REGISTER_DATE} 
+            onCheckboxChange={this.onCheckboxChange}
+            />
             )
          })}
         </tbody>
       </Table>
       <div className='d-flex gap-3'>
         <Button variant="info" >글쓰기</Button>
-        <Button variant="secondary">수정</Button>
+        <Button 
+        variant="secondary" 
+        onClick={()=>{
+          this.props.handleModify(this.state.checkList);
+        }}>수정</Button>
         <Button variant="danger">삭제</Button>
       </div>
       
