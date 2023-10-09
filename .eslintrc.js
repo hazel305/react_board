@@ -28,6 +28,6 @@ module.exports = {
         "react"
     ],
     "rules": {
-        "react/prop-types":"off"
+        "react/prop-types":"off" //타입에러를 없애기 위해서 룰을 만들어주기
     }
 }
