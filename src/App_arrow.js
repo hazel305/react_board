@@ -6,9 +6,11 @@ import Write from "./Write";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 
 function App() {
-  const [isModifyMode, setIsModifyMode] = useState(false);
-  const [isCompleted, setIsCompleted] = useState(true);
-  const [boardId, setBoardId] = useState(0);
+  const [boardState, setBoardState] = useState({
+    isModifyMode: false,
+    isCompleted: true,
+    boardId: 0,
+  });
 
   const handleModify = (checkList) => {
     if (checkList.length === 0) {
@@ -17,19 +19,29 @@ function App() {
     } else if (checkList.length > 1) {
       alert("하나의 게시물만 선택하세요.");
     }
-    setIsModifyMode(checkList.length === 1);
-    setBoardId(checkList[0]);
+    setBoardState({
+      isModifyMode: checkList.length === 1,
+      boardId: checkList[0],
+      // 나머지 상태는 변경하지 않음
+      ...boardState,
+    });
   };
 
   const handleCancel = () => {
-    setIsModifyMode(false);
-    setIsCompleted(false);
-    setBoardId(0);
+    setBoardState({
+      isModifyMode: false,
+      isCompleted: false,
+      boardId: 0,
+    });
   };
 
   const renderComplete = () => {
     // 목록 출력 완료하면
-    setIsModifyMode(true);
+    setBoardState({
+      isModifyMode: true,
+      // 나머지 상태는 변경하지 않음
+      ...boardState,
+    });
   };
 
   return (
@@ -43,7 +55,7 @@ function App() {
               <BoardList
                 handleModify={handleModify}
                 renderComplete={renderComplete}
-                isCompleted={isCompleted}
+                isCompleted={boardState.isCompleted}
               />
             }
           ></Route>
@@ -51,8 +63,8 @@ function App() {
             path="/write"
             element={
               <Write
-                isModifyMode={isModifyMode}
-                boardId={boardId}
+                isModifyMode={boardState.isModifyMode}
+                boardId={boardState.boardId}
                 handleCancel={handleCancel}
               />
             }

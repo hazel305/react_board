@@ -7,12 +7,26 @@ import { Link, useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 
 function Write(props) {
-  const [isModifyMode, setIsModifyMode] = useState(false);
-  const [title, setTitle] = useState("");
-  const [content, setContent] = useState("");
+  // const [isModifyMode, setIsModifyMode] = useState(false);
+  // const [title, setTitle] = useState("");
+  // const [content, setContent] = useState("");
 
+
+  const [form, setForm] = useState({
+    isModifyMode:false,
+    title:'',
+    content:''
+  })
+
+  const {isModifyMode, title, content} = form;
 
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (props.isModifyMode && props.boardId) {
+      detail();
+    }
+  }, [props.isModifyMode, props.boardId]);
 
   let write = () => {
     axios
@@ -21,11 +35,12 @@ function Write(props) {
         content: content,
       })
       .then(() => {
-        // if (result.data.length > 0) {
-        setTitle("");
-        setContent("");
+        setForm({
+          isModifyMode: false,
+          title: "",
+          content: "",
+        });
         navigate("/");
-        // }
         props.handleCancel();
       })
       .catch(function (error) {
@@ -41,8 +56,11 @@ function Write(props) {
         id: props.boardId,
       })
       .then(() => {
-        setTitle("");
-        setContent("");
+        setForm({
+          isModifyMode: false,
+          title: "",
+          content: "",
+        });
         navigate("/");
         props.handleCancel();
       })
@@ -56,9 +74,11 @@ function Write(props) {
       .get(`http://localhost:4000/detail?id=${props.boardId}`)
       .then((result) => {
         if (result.data.length > 0) {
-          setTitle(result.data[0].BOARD_TITLE);
-          setContent(result.data[0].BOARD_CONTENT);
-          setIsModifyMode(true);
+          setForm({
+            isModifyMode: true,
+            title: result.data[0].BOARD_TITLE,
+            content: result.data[0].BOARD_CONTENT,
+          });
         }
         // this.props.handleCancel();
       })
@@ -68,18 +88,14 @@ function Write(props) {
   };
 
   const handleChange = (e) => {
-    if (e.target.name === "title") {
-      setTitle(e.target.value);
-    } else {
-      setContent(e.target.value);
-    }
+    const { name, value } = e.target;
+    setForm({
+      ...form,
+      [name]: value,
+    });
   };
 
-  useEffect(() => {
-    if (props.isModifyMode && props.boardId) {
-      detail();
-    }
-  }, []);
+
 
   return (
     <>
