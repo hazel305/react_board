@@ -72,6 +72,7 @@ class Write extends Component {
           this.setState({
             title: result.data[0].BOARD_TITLE,
             content: result.data[0].BOARD_CONTENT,
+            isModifyMode: true,
           });
         }
         // this.props.handleCancel();
@@ -89,16 +90,25 @@ class Write extends Component {
 
   //지금 보드아이디
   componentDidUpdate = (prevProps) => {
-    if (
-      this.props.isModifyMode == true &&
-      this.props.boardId != prevProps.boardId
-    ) {
+    if (this.props.isModifyMode && this.props.boardId != prevProps.boardId) {
       this.detail(); //수정모드이고 새번호가 왔다면 새번호의 글을 조회
     }
   };
+  // componentDidUpdate(prevProps) {
+  //   if (this.props.boardId !== prevProps.boardId) {
+  //     // 새로운 boardId가 전달되면 isModifyMode를 설정합니다.
+  //     const isModifyMode = this.props.boardId !== 0;
+  //     this.setState({ isModifyMode }, () => {
+  //       // isModifyMode를 업데이트한 후에 detail 메서드를 호출합니다.
+  //       if (isModifyMode) {
+  //         this.detail();
+  //       }
+  //     });
+  //   }
+  // }
 
   render() {
-    // console.log(this.state.content);
+    console.log(this.state.isModifyMode);
     return (
       <>
         <Form>
@@ -130,7 +140,9 @@ class Write extends Component {
           >
             작성완료
           </Button>
-          <Button variant="secondary">취소</Button>
+          <Button variant="secondary" onClick={this.props.handleCancel}>
+            취소
+          </Button>
         </div>
       </>
     );
