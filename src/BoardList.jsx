@@ -39,6 +39,7 @@ class BoardList extends Component {
         this.setState({
           boardList: data,
         });
+        this.props.renderComplete(); //app.js에 목록 출력 완료를 알려준다.
       })
       .catch(function (error) {
         console.log(error);
@@ -48,6 +49,12 @@ class BoardList extends Component {
   componentDidMount() {
     this.getList();
     console.log(this.state.boardList);
+  }
+
+  componentDidUpdate() {
+    if (!this.props.isCompleted) {
+      this.getList();
+    }
   }
 
   onCheckboxChange = (checked, id) => {
@@ -102,7 +109,9 @@ class BoardList extends Component {
           >
             수정
           </Button>
-          <Button variant="danger">삭제</Button>
+          <Button variant="danger" onClick={this.handleDelete}>
+            삭제
+          </Button>
         </div>
       </>
     );

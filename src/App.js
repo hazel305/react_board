@@ -32,13 +32,24 @@ class App extends Component {
     });
   };
 
+  renderComplete = () => {
+    //목록 출력 완료하면
+    this.setState({
+      isModifyMode: true,
+    });
+  };
+
   render() {
     console.log(this.state.boardId);
     // console.log(this.state.isModifyMode);
 
     return (
       <div className="Container">
-        <BoardList handleModify={this.handleModify} />
+        <BoardList
+          handleModify={this.handleModify}
+          renderComplete={this.renderComplete}
+          isCompleted={this.state.isCompleted}
+        />
         <Write
           isModifyMode={this.state.isModifyMode}
           boardId={this.state.boardId}
