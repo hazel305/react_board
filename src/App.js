@@ -40,7 +40,7 @@ class App extends Component {
   };
 
   render() {
-    console.log(this.state.boardId);
+    // console.log(this.state.boardId);
     // console.log(this.state.isModifyMode);
 
     return (

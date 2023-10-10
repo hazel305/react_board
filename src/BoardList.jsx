@@ -46,16 +46,50 @@ class BoardList extends Component {
       });
   };
 
+  handleDelete = () => {
+    if (this.state.checkList.length === 0) {
+      alert("삭제할 게시글을 선택해주세요.");
+      return;
+    }
+    let boardIdList = "";
+
+    this.state.checkList.forEach((item) => {
+      boardIdList += `'${item}',`;
+    });
+    // console.log(boardIdList);
+    boardIdList = boardIdList.substring(0, boardIdList.length - 1);
+    console.log(boardIdList);
+    axios
+      .post("http://localhost:4000/delete", {
+        boardIdList: boardIdList,
+      })
+      .then(() => {
+        this.getList();
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  };
+
   componentDidMount() {
     this.getList();
     console.log(this.state.boardList);
   }
 
-  componentDidUpdate() {
-    if (!this.props.isCompleted) {
+  componentDidUpdate(prevProps) {
+    if (
+      !this.props.isCompleted &&
+      prevProps.isCompleted !== this.props.isCompleted
+    ) {
       this.getList();
     }
   }
+
+  // componentDidUpdate() {
+  //   if (!this.props.isCompleted) {
+  //     this.getList();
+  //   }
+  // }
 
   onCheckboxChange = (checked, id) => {
     const list = this.state.checkList.filter((v) => {
