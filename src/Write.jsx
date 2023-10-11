@@ -11,7 +11,6 @@ function Write(props) {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
 
-
   const navigate = useNavigate();
 
   let write = () => {
